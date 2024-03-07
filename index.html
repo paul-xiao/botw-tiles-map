@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaflet 瓦片地图示例</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 引入 Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- 引入 Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+      #map {
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+        height: 100vh; /* 视口高度 */
+        width: 100vw; /* 视口宽度 */
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map" style="width: 100vw; height: 100vh"></div>
+
+    <script>
+      // 初始化地图并设置其中心点坐标和缩放级别
+      var bounds = new L.LatLngBounds(new L.LatLng(50, -50), new L.LatLng(-50, 50))
+
+      var map = L.map('map', {
+        crs: L.CRS.Simple,
+        attributionControl: false,
+        maxBounds: bounds,
+        maxBoundsViscosity: 0.1
+      }).setView([0, 0], 3)
+
+      // 添加 OpenStreetMap 瓦片图层
+      var layer = L.tileLayer('tiles/{z}/{x}_{y}.png', {
+        attribution: '&copy; Botw',
+        minZoom: 3,
+        maxZoom: 7,
+        noWrap: true,
+        bounds: bounds
+      }).addTo(map)
+
+      // 添加标记（可选）
+      // L.marker([51.5, -0.09]).addTo(map).bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup()
+
+      // 监听地图点击事件（可选）
+      map.on('click', function (e) {
+        alert('你点击了地图的位置: ' + e.latlng)
+      })
+
+      window.addEventListener('resize', function () {
+        map.fitBounds(bounds); // 重新设置边界以确保地图居中  
+      })
+    </script>
+  </body>
+</html>
