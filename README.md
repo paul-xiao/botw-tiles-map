@@ -1,6 +1,6 @@
 # botw-tiles-map
 
-> a botw tiles map demo
+> a botw tiles map
 
 ## framework
 
