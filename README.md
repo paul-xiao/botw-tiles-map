@@ -11,4 +11,4 @@
 check [Image-Tiling-Tool](https://github.com/paul-xiao/Image-Tiling-Tool)
 ## how to start
 
-run this project on an static server
+run this project on any static server
