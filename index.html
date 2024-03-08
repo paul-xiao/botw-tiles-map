@@ -28,35 +28,49 @@
     <div id="map" style="width: 100vw; height: 100vh"></div>
 
     <script>
-      // 初始化地图并设置其中心点坐标和缩放级别
-      var bounds = new L.LatLngBounds(new L.LatLng(50, -50), new L.LatLng(-50, 50))
-
+      const size = 64 // 最小切片大小
+      const startCorner = [0, 0]
+      const endCorner = [-size, size]
+      // 默认以左下角为起始点（0，0），如果切图顺序也是从左上角开始的，图片加载的结束点则为右下角， 反之则为右上角
+      // 如需更换起始点，需要执行下面的操作
+      // L.CRS.Simple.transformation = new L.Transformation(1, 0, 1, 0) // 坐标原点切换为左上角
+      // 边界如果设置不正确会出现404的情况，说明切图和实际边界不符合
+      var bounds = new L.LatLngBounds(new L.LatLng(startCorner[0], startCorner[1]), new L.LatLng(endCorner[0], endCorner[1]))
+      const elm = document.getElementById('map')
+      const clientWidth = elm.clientWidth
+      const clientHeight = elm.clientHeight
       var map = L.map('map', {
-        crs: L.CRS.Simple,
-        attributionControl: false,
-        maxBounds: bounds,
-        maxBoundsViscosity: 0.1
-      }).setView([0, 0], 3)
+        crs: L.CRS.Simple, // Coordinate Reference System
+        // attributionControl: false,
+        maxBounds: bounds, // 设置边界，超过边界会回弹
+        maxBoundsViscosity: 1
+      }).setView([endCorner[0] / 2, endCorner[1] / 2], 3)
 
       // 添加 OpenStreetMap 瓦片图层
-      var layer = L.tileLayer('tiles/{z}/{x}_{y}.png', {
-        attribution: '&copy; Botw',
+      var layer = L.tileLayer('assets/tiles/{z}/{x}_{y}.png', {
+        attribution: '&copy; 塞尔达狂野之息',
+        continuousWorld: true,
+        noWrap: true,
         minZoom: 3,
         maxZoom: 7,
-        noWrap: true,
         bounds: bounds
       }).addTo(map)
 
       // 添加标记（可选）
-      // L.marker([51.5, -0.09]).addTo(map).bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup()
+      // L.marker(startCorner).addTo(map).bindPopup('<b>Center Here!</b>').openPopup()
+      L.marker([endCorner[0] / 2, endCorner[1] / 2])
+        .addTo(map)
+        .bindPopup('<b>Center Here!</b>')
+        .openPopup()
+      // L.marker(endCorner).addTo(map).bindPopup('<b>Center Here!</b>').openPopup()
 
       // 监听地图点击事件（可选）
-      map.on('click', function (e) {
-        alert('你点击了地图的位置: ' + e.latlng)
-      })
+      // map.on('click', function (e) {
+      //   alert('你点击了地图的位置: ' + e.latlng)
+      // })
 
       window.addEventListener('resize', function () {
-        map.fitBounds(bounds); // 重新设置边界以确保地图居中  
+        map.fitBounds(bounds) // 重新设置边界以确保地图居中
       })
     </script>
   </body>

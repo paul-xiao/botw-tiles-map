@@ -6,6 +6,7 @@
 
 - [leaflet](https://leafletjs.com/)
 
+## how to get tiles
 
 ## how to start
 
